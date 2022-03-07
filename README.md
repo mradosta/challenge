@@ -1,8 +1,8 @@
 # Smart Contract Challenge
 
 ## CHECK THE RESOLUTION
-https://github.com/mradosta/challenge/RESOLUTION.md
 
+[Explanation](https://github.com/mradosta/challenge/blob/main/RESOLUTION.md)
 
 ## A) Challenge
 
