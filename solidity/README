@@ -1,0 +1,93 @@
+truffle migrate --reset
+
+const ETHPool = await ETHPool.deployed()
+ETHPool.address
+
+ETHPool.addDeposit(200)
+ETHPool.addReward(100)
+ETHPool.addDeposit(100)
+ETHPool.getDeposits()
+ETHPool.withdraw()
+
+
+
+docker exec -it flip-b-truffle bash
+ganache-cli --account "0x390f8b5dd939337d7ca7ccb18f0a81deade0ff1595e9149e9ae94f5a6d74117f,90000000000000000000000"
+
+
+
+
+
+mradosta@Martins-MBP solidity % truffle migrate --network rinkeby
+
+Compiling your contracts...
+===========================
+> Everything is up to date, there is nothing to compile.
+
+
+Starting migrations...
+======================
+> Network name:    'rinkeby'
+> Network id:      4
+> Block gas limit: 30000000 (0x1c9c380)
+
+
+1_initial_migration.js
+======================
+
+   Deploying 'Migrations'
+   ----------------------
+   > transaction hash:    0xf10f60343632e2af910d1eeff2eae47a1929db6bd14517acac9b6f52a5066714
+   > Blocks: 1            Seconds: 21
+   > contract address:    0x7f9b7CD8653580533Af2280E365F7EA64B47d203
+   > block number:        10287813
+   > block timestamp:     1646666153
+   > account:             0xbe384d38d67752b93a6EBa0eCAD060a47D0f71E3
+   > balance:             33.615513645109119084
+   > gas used:            250142 (0x3d11e)
+   > gas price:           1.102033254 gwei
+   > value sent:          0 ETH
+   > total cost:          0.000275664802222068 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 1 (block: 10287814)
+   > confirmation number: 2 (block: 10287815)
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:     0.000275664802222068 ETH
+
+
+2_eth_pool_migration.js
+=======================
+
+   Deploying 'ETHPool'
+   -------------------
+   > transaction hash:    0x8d8ab64d704bd21c7339333ca87d632bd06ad587edb768e5fd02d3d441666d7a
+   > Blocks: 1            Seconds: 21
+   > contract address:    0xFaE85216eeB820549108e3f5fF734c985DB2e1f4
+   > block number:        10287818
+   > block timestamp:     1646666228
+   > account:             0xbe384d38d67752b93a6EBa0eCAD060a47D0f71E3
+   > balance:             33.615463040727869858
+   > gas used:            1452379 (0x16295b)
+   > gas price:           1.102072904 gwei
+   > value sent:          0 ETH
+   > total cost:          0.001600627542238616 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 1 (block: 10287819)
+   > confirmation number: 2 (block: 10287820)
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:     0.001600627542238616 ETH
+
+Summary
+=======
+> Total deployments:   2
+> Final cost:          0.001876292344460684 ETH

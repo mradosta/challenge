@@ -1,5 +1,9 @@
 # Smart Contract Challenge
 
+## CHECK THE RESOLUTION
+https://github.com/mradosta/challenge/RESOLUTION.md
+
+
 ## A) Challenge
 
 ### 1) Setup a project and create a contract

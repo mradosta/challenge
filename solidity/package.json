@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "truffle-privatekey-provider": "^1.5.0"
+  }
+}
