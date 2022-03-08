@@ -18,14 +18,11 @@ contract("ETHPool test", async accounts => {
   /* HELPER FUNCTION */
   const getSafeAmountFromEth = (eth) => {
     return web3.utils.fromWei(web3.utils.toBN("0x"+(eth*10**18).toString(16)), "ether");
-    // return web3.utils.toBN("0x"+(eth*10**18).toString(16));
-    // return web3.utils.toWei(web3.utils.toBN(eth), "ether");
-    // return web3.utils.toBN(web3.utils.toWei(eth, "ether"));
   };
 
-  const getEthFromWei = (wei) => {
-    return web3.utils.fromWei(wei, "ether");
-  };
+  // const getEthFromWei = (wei) => {
+  //   return web3.utils.fromWei(wei, "ether");
+  // };
 
   // const delay = (s) => {
   //   return new Promise(resolve => setTimeout(resolve, s * 1000));
@@ -38,172 +35,6 @@ contract("ETHPool test", async accounts => {
   });
 
 
-  // it("A should consider reward's deposit dates", async () => {
-
-  //   // console.log('STEP 1')
-  //   await contract.addDeposit({ value : getSafeAmountFromEth(2), from : accounts[1] });
-  //   // await contract.addReward({ value : getSafeAmountFromEth(10), from : accounts[0] });
-  //   let accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   // console.log('accountABalance', getEthFromWei(accountABalance));
-
-  //   // console.log('STEP 2')
-  //   await contract.addDeposit({ value : getSafeAmountFromEth(2), from : accounts[2] });
-  //   accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   accountBBalance = await contract.getBalance({ from : accounts[2] });
-  //   // console.log('accountABalance', getEthFromWei(accountABalance))
-  //   // console.log('accountBBalance', getEthFromWei(accountBBalance))
-
-  //   // console.log('STEP 3')
-  //   await contract.addReward({ value : getSafeAmountFromEth(1), from : accounts[0] });
-  //   accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   accountBBalance = await contract.getBalance({ from : accounts[2] });
-  //   // console.log('accountABalance', getEthFromWei(accountABalance))
-  //   // console.log('accountBBalance', getEthFromWei(accountBBalance))
-
-  //   contractBalance = await contract.getContractBalance();
-  //   accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   accountBBalance = await contract.getBalance({ from : accounts[2] });
-  //   assert.equal(contractBalance, getSafeAmountFromEth(5), "Total in the contract is not correct");
-
-  //   assert.equal(accountABalance, getSafeAmountFromEth(2.5), "balance for A is not correct");
-  //   assert.equal(accountBBalance, getSafeAmountFromEth(2.5), "balance for B is not correct");
-  // });
-
-  // it("B should consider reward's deposit dates", async () => {
-
-  //   // console.log('STEP 1')
-  //   await contract.addDeposit({ value : getSafeAmountFromEth(20), from : accounts[1] });
-  //   // await contract.addReward({ value : getSafeAmountFromEth(10), from : accounts[0] });
-  //   let accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   // console.log('accountABalance', getEthFromWei(accountABalance));
-
-  //   // console.log('STEP 2')
-  //   await contract.addDeposit({ value : getSafeAmountFromEth(20), from : accounts[2] });
-  //   accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   accountBBalance = await contract.getBalance({ from : accounts[2] });
-  //   // console.log('accountABalance', getEthFromWei(accountABalance))
-  //   // console.log('accountBBalance', getEthFromWei(accountBBalance))
-
-  //   // console.log('STEP 3')
-  //   await contract.addReward({ value : getSafeAmountFromEth(10), from : accounts[0] });
-  //   accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   accountBBalance = await contract.getBalance({ from : accounts[2] });
-  //   // console.log('accountABalance', getEthFromWei(accountABalance))
-  //   // console.log('accountBBalance', getEthFromWei(accountBBalance))
-
-  //   contractBalance = await contract.getContractBalance();
-  //   accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   accountBBalance = await contract.getBalance({ from : accounts[2] });
-  //   assert.equal(contractBalance, 50, "Total in the contract is not correct");
-
-  //   assert.equal(accountABalance, 25, "balance for A is not correct");
-  //   assert.equal(accountBBalance, 25, "balance for B is not correct");
-  // });
-
-  it("Should consider reward's deposit dates", async () => {
-
-    // console.log('STEP 1')
-    await contract.addDeposit({ value : getSafeAmountFromEth(200), from : accounts[1] });
-    // await contract.addReward({ value : getSafeAmountFromEth(10), from : accounts[0] });
-    let accountABalance = await contract.getBalance({ from : accounts[1] });
-    // console.log('accountABalance', getEthFromWei(accountABalance));
-
-    // console.log('STEP 2')
-    await contract.addDeposit({ value : getSafeAmountFromEth(200), from : accounts[2] });
-    accountABalance = await contract.getBalance({ from : accounts[1] });
-    accountBBalance = await contract.getBalance({ from : accounts[2] });
-    // console.log('accountABalance', getEthFromWei(accountABalance))
-    // console.log('accountBBalance', getEthFromWei(accountBBalance))
-
-    // console.log('STEP 3')
-    await contract.addReward({ value : getSafeAmountFromEth(100), from : accounts[0] });
-    accountABalance = await contract.getBalance({ from : accounts[1] });
-    accountBBalance = await contract.getBalance({ from : accounts[2] });
-    // console.log('accountABalance', getEthFromWei(accountABalance))
-    // console.log('accountBBalance', getEthFromWei(accountBBalance))
-
-    contractBalance = await contract.getContractBalance();
-    accountABalance = await contract.getBalance({ from : accounts[1] });
-    accountBBalance = await contract.getBalance({ from : accounts[2] });
-    assert.equal(contractBalance, 500, "Total in the contract is not correct");
-
-    assert.equal(accountABalance, 250, "balance for A is not correct");
-    assert.equal(accountBBalance, 250, "balance for B is not correct");
-  });
-
-  it("should consider reward's deposit dates", async () => {
-
-    // console.log('STEP 1')
-    await contract.addDeposit({ value : getSafeAmountFromEth(10), from : accounts[1] });
-    await contract.addReward({ value : getSafeAmountFromEth(10), from : accounts[0] });
-    let accountABalance = await contract.getBalance({ from : accounts[1] });
-    // console.log('accountABalance', accountABalance);
-
-    // console.log('STEP 2')
-    await contract.addDeposit({ value : getSafeAmountFromEth(20), from : accounts[2] });
-    accountABalance = await contract.getBalance({ from : accounts[1] });
-    accountBBalance = await contract.getBalance({ from : accounts[2] });
-    // console.log('accountABalance', accountABalance);
-    // console.log('accountBBalance', accountBBalance);
-
-    // console.log('STEP 3')
-    await contract.addReward({ value : getSafeAmountFromEth(10), from : accounts[0] });
-    accountABalance = await contract.getBalance({ from : accounts[1] });
-    accountBBalance = await contract.getBalance({ from : accounts[2] });
-    // console.log('accountABalance', accountABalance);
-    // console.log('accountBBalance', accountBBalance);
-
-    contractBalance = await contract.getContractBalance();
-    accountABalance = await contract.getBalance({ from : accounts[1] });
-    accountBBalance = await contract.getBalance({ from : accounts[2] });
-    assert.equal(contractBalance, 50, "Total in the contract is not correct");
-
-    assert.equal(accountABalance, 25, "balance for A is not correct");
-    assert.equal(accountBBalance, 25, "balance for B is not correct");
-  });
-
-
-  // it("AA should consider reward's deposit dates", async () => {
-
-  //   // console.log('STEP 1')
-  //   await contract.addDeposit({ value : getSafeAmountFromEth(1), from : accounts[1] });
-  //   await contract.addReward({ value : getSafeAmountFromEth(1), from : accounts[0] });
-  //   let accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   // console.log('accountABalance', accountABalance);
-
-  //   // console.log('STEP 2')
-  //   await contract.addDeposit({ value : getSafeAmountFromEth(2), from : accounts[2] });
-  //   accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   accountBBalance = await contract.getBalance({ from : accounts[2] });
-  //   // console.log('accountABalance', accountABalance);
-  //   // console.log('accountBBalance', accountBBalance);
-
-  //   // console.log('STEP 3')
-  //   await contract.addReward({ value : getSafeAmountFromEth(1), from : accounts[0] });
-  //   accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   accountBBalance = await contract.getBalance({ from : accounts[2] });
-  //   // console.log('accountABalance', accountABalance);
-  //   // console.log('accountBBalance', accountBBalance);
-
-  //   contractBalance = await contract.getContractBalance();
-  //   accountABalance = await contract.getBalance({ from : accounts[1] });
-  //   accountBBalance = await contract.getBalance({ from : accounts[2] });
-  //   assert.equal(contractBalance, 5, "Total in the contract is not correct");
-
-  //   assert.equal(accountABalance, 2.5, "balance for A is not correct");
-  //   assert.equal(accountBBalance, 2.5, "balance for B is not correct");
-  // });
-
-  /*
-  it("should sum rewards to deposits", async () => {
-    assert.equal(getSafeAmountFromEth(2), '2000000000000000000', 'pedo');
-
-    // await contract.addDeposit({ value : getSafeAmountFromEth(200), from : accounts[1] });
-    await contract.addDeposit({ value : '2000000000000000000', from : accounts[1] });
-
-  });
-  */
-
   it("should sum rewards to deposits", async () => {
 
     await contract.addDeposit({ value : getSafeAmountFromEth(100), from : accounts[1] });
@@ -212,7 +43,7 @@ contract("ETHPool test", async accounts => {
     let contractBalance = await contract.getContractBalance();
     let accountABalance = await contract.getBalance({ from : accounts[1] });
     assert.equal(contractBalance, 200, "Total in the contract is not correct");
-    assert.equal(accountABalance, 200, "balance for A is not correct");
+    assert.equal(accountABalance, 100, "balance for A is not correct");
   });
 
 
@@ -226,7 +57,7 @@ contract("ETHPool test", async accounts => {
     let accountABalance = await contract.getBalance({ from : accounts[1] });
     let accountBBalance = await contract.getBalance({ from : accounts[2] });
     assert.equal(contractBalance.toNumber(), 600, "Total in the contract is not correct");
-    assert.equal(accountABalance.toNumber(), 300, "balance for A is not correct");
+    assert.equal(accountABalance.toNumber(), 100, "balance for A is not correct");
     assert.equal(accountBBalance.toNumber(), 300, "balance for B is not correct");
   });
 
@@ -268,8 +99,8 @@ contract("ETHPool test", async accounts => {
         }
       }
     }
-    assert.ok(err instanceof Error)
-    assert.equal(errReason, "Cannot add rewards. Will lost fund. Nobody will be able to withdraw it");
+    assert.ok(err == null)
+    assert.ok(errReason == null)
   });
 
 
@@ -395,10 +226,10 @@ contract("ETHPool test", async accounts => {
     assert.equal(contractTotal.toNumber(), 300, "Total in the contract after B deposits 100 is not correct");
 
     let accountABalance = await contract.getBalance({ from : accounts[1] });
-    assert.equal(accountABalance.toNumber(), 100, "Total deposits in  are not correct");
+    assert.equal(accountABalance.toNumber(), 100, "Total deposits in A are not correct");
 
     let accountBBalance = await contract.getBalance({ from : accounts[2] });
-    assert.equal(accountBBalance.toNumber(), 200, "Total deposits in  are not correct");
+    assert.equal(accountBBalance.toNumber(), 200, "Total deposits in B are not correct");
 
 
     await contract.withdraw({ from: accounts[1] });

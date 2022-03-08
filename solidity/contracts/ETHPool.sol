@@ -228,7 +228,7 @@ library SafeMath {
   - Very basic security patterns implement
   - ETHPool team has just one account (owner)
   - ETHPool team account is the contract account creator (owner). For simplicity I don't implement @openzeppelin/contracts/access/AccessControl.sol (best option for this situation)
-  - Rewards for each account are calculated in the moment when the team account deposits
+  - Rewards for each account are calculated in the moment when the account ask for withdrawal
 */
 contract ETHPool {
 
@@ -243,18 +243,15 @@ contract ETHPool {
 
 
   uint256 depositsTotal = 0;
-
-  // helper variable to know accounts in the pool as mappings are not iterables
-  address[] private accountsInThePool;
+  Deposit rewards;
 
   // We map user addresses to Deposit, this way, each address has a Deposit assigned to them.
-  // mapping (address => uint256) private deposits;
   mapping (address => Deposit) private deposits;
 
-  // The struct of the Deposit.
+  // The struct of the Deposit. A reward is also a deposit
   struct Deposit {
-    bool created;
     uint256 amount;
+    uint256 date;
   }
 
 
@@ -276,17 +273,6 @@ contract ETHPool {
   }
 
 
-  // Gets the deposits for the used who called the function
-  // function getDeposits() public view returns (Deposit [] memory) {
-  //   return deposits[msg.sender];
-  // }
-
-
-  // function getRewards() public view returns (Deposit [] memory) {
-  //   return deposits[owner];
-  // }
-
-
   function getDepositsTotal() public view returns (uint256) {
     return depositsTotal;
   }
@@ -303,16 +289,10 @@ contract ETHPool {
     require(msg.value > 0, "Amount value is not valid!");
 
 
-    if (!deposits[msg.sender].created) {
-      accountsInThePool.push(msg.sender);
-      deposits[msg.sender].created = true;
-      deposits[msg.sender].amount = 0;
-    }
+    deposits[msg.sender].date = block.timestamp;
     deposits[msg.sender].amount = deposits[msg.sender].amount.add(msg.value);
-
     depositsTotal = depositsTotal.add(msg.value);
 
-    // emits item added event.
     emit depositAdded(msg.sender, msg.value, deposits[msg.sender].amount);
   }
 
@@ -325,30 +305,14 @@ contract ETHPool {
     // require a valid amount.
     require(msg.value > 0, "Amount value is not valid!");
 
-    bool canAddReward = false;
-    uint256 accountLength = accountsInThePool.length;
-    if (accountLength > 0) {
-      for (uint256 i = 0; i < accountLength; i++) {
-        address account = accountsInThePool[i];
+    require(depositsTotal > 0, "Cannot add rewards. Will lost fund. Nobody will be able to withdraw it");
 
-        uint256 total = deposits[account].amount;
-        if (total > 0) {
-          canAddReward = true;
-          uint256 percentage = total.mul(100).div(depositsTotal);
-          // emit totalLog(total);
-          // emit depositTotalLog(depositsTotal);
-          // emit percentageLog(percentage);
-          uint256 rewards = msg.value.mul(percentage).div(100);
-          // uint rewards = ((deposits[account].amount * msg.value) / depositsTotal);
-          deposits[account].amount = deposits[account].amount.add(rewards);
-          emit rewardAdded(account, rewards, deposits[account].amount);
-        }
-      }
-    }
+    rewards.date = block.timestamp;
+    rewards.amount = rewards.amount.add(msg.value);
 
-    require(canAddReward, "Cannot add rewards. Will lost fund. Nobody will be able to withdraw it");
-    depositsTotal = depositsTotal.add(msg.value);
+    emit rewardAdded(msg.sender, msg.value, rewards.amount);
   }
+
 
   function withdraw() external {
     require(address(msg.sender) != address(0), "Invalid address");
@@ -357,13 +321,25 @@ contract ETHPool {
     require(deposits[msg.sender].amount > 0, "Nothing to withdraw");
     require(getContractBalance() >= deposits[msg.sender].amount, "Not enougth founds!"); // very big problem!
 
-    uint256 totalToWithdraw = deposits[msg.sender].amount;
+    uint256 totalToWithdraw;
+    if (deposits[msg.sender].date < rewards.date) {
+
+      uint256 percentage = deposits[msg.sender].amount.mul(100).div(depositsTotal);
+      uint256 currentAccountRewards = rewards.amount.mul(percentage).div(100);
+      totalToWithdraw = deposits[msg.sender].amount.add(currentAccountRewards);
+
+      depositsTotal = depositsTotal.sub(deposits[msg.sender].amount);
+      rewards.amount = rewards.amount.sub(currentAccountRewards);
+
+    } else {
+      totalToWithdraw = deposits[msg.sender].amount;
+    }
+
     deposits[msg.sender].amount = 0;
     (bool success, ) = msg.sender.call{value:totalToWithdraw}("");
-
     require(success, "Withdraw failed");
-    removeAddressFromThePool(msg.sender); // mantain as small a prossible the accountsInThePool array
     emit withdrawal(totalToWithdraw);
+
   }
 
 
@@ -375,21 +351,5 @@ contract ETHPool {
     return deposits[msg.sender].amount;
   }
 
-  function removeAddressFromThePool(address account) private {
-    uint256 index;
-    uint256 accountsInThePoolLength = accountsInThePool.length;
 
-    for (uint256 i = 0; i < accountsInThePoolLength; i++) {
-      if (account == accountsInThePool[i]) {
-        index = i;
-        break;
-      }
-    }
-    require(index < accountsInThePoolLength, "index out of bound");
-
-    for (uint256 i = index; i < accountsInThePoolLength - 1; i++) {
-      accountsInThePool[i] = accountsInThePool[i + 1];
-    }
-    accountsInThePool.pop();
-  }
 }
